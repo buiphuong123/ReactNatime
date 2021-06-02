@@ -15,12 +15,12 @@ login.post('/login', async (req, res) => {
                 return res.json({message: 'Login success'});
             }
             else{
-                return res.json({message: 'password fail'});
+                return res.json({error: 'password fail'});
             }
 
         }
         else {
-            return res.json({message: 'not found account'});
+            return res.json({error: 'not found account'});
         }
     } catch (error) {
         return res.json({error});
