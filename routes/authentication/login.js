@@ -10,9 +10,10 @@ login.post('/login', async (req, res) => {
     console.log(req.body);
     try {
         const user = await User.findOne({username});
+        const useremail = await User.findOne({email});
         if ( user) {
             if(await bcrypt.compare(password, user.password)) {
-                return res.json({message: 'Login success'});
+                return res.json({message: 'Login success', email: useremail});
             }
             else{
                 return res.json({message: 'password fail'});
