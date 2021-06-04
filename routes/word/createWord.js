@@ -7,7 +7,6 @@ const word = express.Router();
 word.post('/createWord', async (req, res) => {
     const {hira, kanji, vn} = req.body;
     console.log(req.body);
-    // kiem tra xem user cho trong db chua
     try {
         const newWord = new Word({hira, kanji, vn});
         await newWord.save();
