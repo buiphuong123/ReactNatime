@@ -1,18 +1,18 @@
 const mongoose = require('mongoose');
 
-const userSchema = mongoose.Schema({
-    username: {
+const wordSchema = mongoose.Schema({
+    hira: {
         type: String,
         require: true,
     },
-    email: {
+    kanji: {
         type: String,
         require: true,
     },
-    password: {
+    vn: {
         type: String,
         require: true,
     },
 }); 
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('Word', wordSchema);
