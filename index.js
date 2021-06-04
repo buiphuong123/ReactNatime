@@ -59,4 +59,4 @@ const useApi = (object, object2, prefix = []) => {
 
 useApi(api, api);
 
-app.listen(3001);
+app.listen(process.env.PORT || 3001);
