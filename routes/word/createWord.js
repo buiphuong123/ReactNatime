@@ -2,13 +2,38 @@ const express = require('express');
 const mongoose = require('mongoose');
 const Word = require('../../models/Word');
 
-const word = express.Router();
+const createWord = express.Router();
 
-word.post('/createWord', async (req, res) => {
-    const {hira, kanji, vn} = req.body;
+createWord.post('/createWord', async (req, res) => {
+    const {hira, kanji, vn, amhan, kata, level, type, typeWord, verbGround, typeVerb, typeAdj} = req.body;
     console.log(req.body);
     try {
-        const newWord = new Word({hira, kanji, vn});
+        let newWord;
+        if (type==2 && typeWord == 'V'){
+            newWord = new Word({hira, kanji, vn, type, level, amhan, verbGround, typeVerb, typeWord});
+        }
+        else if (type==2 && typeWord == 'ADJ'){
+            newWord = new Word({hira, kanji, amhan, vn, type, level, amhan, typeAdj, typeWord});
+        }
+        else if (type == 2) {
+            newWord = new Word({hira, kanji, vn, type, level, amhan, typeWord});
+        }
+        else if (type==1 && typeWord == 'V'){
+            newWord = new Word({hira, vn, type, level, verbGround, typeVerb, typeWord});
+        }
+        else if (type==1 && typeWord == 'ADJ'){
+            newWord = new Word({hira, vn, type, level, typeAdj, typeWord});
+        }
+        else if (type == 1) {
+            newWord = new Word({hira, vn, type, level, typeWord});
+        }
+        else if (type==3 && typeWord == 'ADJ'){
+            newWord = new Word({kata, vn, type, level, typeAdj, typeWord});
+        }
+        else if(type == 3) {
+            newWord = new Word({kata, vn, type, level, typeWord});
+        }
+        
         await newWord.save();
         return res.json({message: 'Tao word thanh cong'});
     } catch (error) {
@@ -17,4 +42,4 @@ word.post('/createWord', async (req, res) => {
 
 });
 
-module.exports = word;
+module.exports = createWord;

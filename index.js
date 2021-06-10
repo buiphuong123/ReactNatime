@@ -6,7 +6,7 @@ dotenv.config();
 
 // import cac models
 require('./models/User');
-
+require('./models/Word');
 // connect mongodb
 mongoose.connect(process.env.MONGODB_URI || '', {
 	useNewUrlParser: true,
