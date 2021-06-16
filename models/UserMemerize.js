@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 const userMemerizeSchema = mongoose.Schema({
     userId: {
         type: String,
-        require: true,
+        ref: "User"
     },
     
     wordId: {
         type: String,
-        require: true,
+        ref: "Word",
     },
 }); 
 

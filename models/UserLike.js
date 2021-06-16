@@ -3,13 +3,14 @@ const mongoose = require('mongoose');
 const userLikeSchema = mongoose.Schema({
     userId: {
         type: String,
-        require: true,
+        ref: "User"
     },
-    
     wordId: {
-        type: String,
-        require: true,
-    },
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Word',
+    }
+    
+   
 }); 
 
 module.exports = mongoose.model('UserLike', userLikeSchema);
