@@ -12,6 +12,7 @@ usLike.post('/userLike', async (req, res) => {
     try {
         const newWordLike = new UserLike({userId, wordId});
         await newWordLike.save();
+        console.log('new word like la' + newWordLike);
         const word = await UserLike.find({wordId: wordId, userId: userId}).populate("wordId");
         return res.json({message: 'Like success', userLike: word});
     } catch (error) {

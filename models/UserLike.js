@@ -8,7 +8,11 @@ const userLikeSchema = mongoose.Schema({
     wordId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Word',
-    }
+    },
+    isLike: {
+        type: Boolean,
+        default: true,
+    },
     
    
 }); 

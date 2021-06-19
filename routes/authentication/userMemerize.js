@@ -10,7 +10,8 @@ usMemerize.post('/userMemerize', async (req, res) => {
     try {
         const newWordMemerize = new UserMemerize({userId, wordId});
         await newWordMemerize.save();
-        return res.json({message: 'Memerize success', usermemerize: newWordMemerize});
+        const word = await UserMemerize.find({wordId: wordId, userId: userId}).populate("wordId");
+        return res.json({message: 'Memerize success', usermemerize: word});
     } catch (error) {
         return res.json({error});
     }

@@ -10,6 +10,11 @@ const userMemerizeSchema = mongoose.Schema({
         type: String,
         ref: "Word",
     },
+    isMemerize: {
+        type: Boolean,
+        default: true,
+    },
+    
 }); 
 
 module.exports = mongoose.model('UserMemerize', userMemerizeSchema);
