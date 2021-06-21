@@ -9,57 +9,58 @@ const getuser = express.Router();
 
 getuser.get('/listWordLikeMem/:id', async (req, res) => {
     var id = req.params.id;
-//    var mem = await UserMemerize.find({userId: id});
-//    var result = await UserLike.find({
-//        userId: id, 
-//        wordId: {$in: mem.map(x => x.wordId)}
-//    }).populate("wordId");
-//    var onlyMem = await UserLike.find({userId: id});
-//    var memer = await UserMemerize.find({
-//        userId: id, 
-//        wordId: {$nin: onlyMem.map(x => x.wordId)},
-//    }).populate("wordId");
-//    var onlyLike = await UserLike.find({
-//        userId: id,
-//        wordId: {$nin: mem.map(x => x.wordId)},
-//    }).populate("wordId");
-//    return res.json({result, memer, onlyLike});
-    
-UserLike.aggregate([
+Word.aggregate([
     {
         $lookup: {
             from: "userlikes",
-            localField: "_id",
-            foreignField: "wordId",
-            as: "userlikes"
+            let: {user: "$userId", idd: "$_id"},
+            pipeline: [
+                {
+                    $match: 
+                    {
+                        $expr: 
+                        {
+                            $and:
+                            [
+                                {$eq: ["$userId", id]},
+                                {$eq: ["$$idd", "$wordId"]}
+                            ]
+                        }
+                    }
+                },
+                { $project: { isLike: 1, _id: 0 } }
+            ],
+            as: "likes"
         }
+        
     },
-    { $unwind: "$userlikes"},
-    {
-        $lookup: {
-            from: "usermemerizes",
-            localField: "wordId",
-            foreignField: "wordId",
-            as: "usermemerizes"
-        }
-    },
-    { $unwind: "$usermemerizes"},
-    {
-        $match: {
-            $and: [{"userId": id}]
-        }
-    },
-    {
-        $project: {
-            _id: 1,
-            wordId:1,
-            isLike: "$userlikes.isLike",
-            isMemerize: "$usermemerizes.isMemerize",
-        }
+    {$lookup: {
+        from: "usermemerizes",
+        let: {user: "$userId", idd: "$_id"},
+        pipeline: [
+            {
+                $match: 
+                {
+                    $expr: 
+                    {
+                        $and:
+                        [
+                            {$eq: ["$userId", id]},
+                            {$eq: ["$$idd", "$wordId"]}
+                        ]
+                    }
+                }
+            },
+            { $project: { isMemerize: 1, _id: 0 } }
+        ],
+        as: "memerizes"
+    }},
+], function(err, data) {
+    if(err) {
+        res.json({kq: 0, errMsg: err});
+    }else {
+        res.json(data);
     }
-], function(err, res) {
-    if(err) throw err;
-    console.log(res);
 })
 
 });

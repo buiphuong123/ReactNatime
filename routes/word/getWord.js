@@ -1,30 +1,65 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const Word = require('../../models/Word');
-const UserLike = require('../../models/UserLike');
-const UserMemerize = require('../../models/UserMemerize');
-const getword = express.Router();
 
-getword.get('/getWord/:id', async(req, res) => {
-    Word.find()
-    .then(result=>{
-        res.status(200).json({
-            wordData: result
-        });
-    })
-    .catch(err => {
-        console.log(err);
-        res.status(500).json({
-            error: err
-        })
-    });
-    // var id = req.params.id;
-    // var wordlikes = await UserLike.find({userId: id}, {wordId: 1, isLike: 1, _id: 0});
-    // var words = await Word.find({
-    //     _id: {$in: wordlikes.map(x => x.wordId)}
-    // })
-    // res.json({words});
+const getuser = express.Router();
+
+getuser.get('/getWord/:id', async (req, res) => {
+    var id = req.params.id;
+Word.aggregate([
+    {
+        $lookup: {
+            from: "userlikes",
+            let: {user: "$userId", idd: "$_id"},
+            pipeline: [
+                {
+                    $match: 
+                    {
+                        $expr: 
+                        {
+                            $and:
+                            [
+                                {$eq: ["$userId", id]},
+                                {$eq: ["$$idd", "$wordId"]}
+                            ]
+                        }
+                    }
+                },
+                { $project: { isLike: 1, _id: 0 } }
+            ],
+            as: "likes"
+        }
+        
+    },
+    {$lookup: {
+        from: "usermemerizes",
+        let: {user: "$userId", idd: "$_id"},
+        pipeline: [
+            {
+                $match: 
+                {
+                    $expr: 
+                    {
+                        $and:
+                        [
+                            {$eq: ["$userId", id]},
+                            {$eq: ["$$idd", "$wordId"]}
+                        ]
+                    }
+                }
+            },
+            { $project: { isMemerize: 1, _id: 0 } }
+        ],
+        as: "memerizes"
+    }},
+], function(err, data) {
+    if(err) {
+        res.json({kq: 0, errMsg: err});
+    }else {
+        res.json(data);
+    }
+})
 
 });
 
-module.exports = getword;
+module.exports = getuser;
