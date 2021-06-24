@@ -6,9 +6,12 @@ const createWord = express.Router();
 
 createWord.post('/createWord', async (req, res) => {
     const {hira, kanji, vn, amhan, kata, level, type, typeWord, verbGround, typeVerb, typeAdj} = req.body;
-    console.log(req.body);
     try {
         let newWord;
+        const wordkata = await Word.findOne({kata});
+        const wordhirakanji = await Word.findOne({hira, kanji});
+        if(wordkata || wordhirakanji)
+            return res.json({message: 'word da ton tai'});
         if (type==2 && typeWord == 'V'){
             newWord = new Word({hira, kanji, vn, type, level, amhan, verbGround, typeVerb, typeWord});
         }
@@ -37,7 +40,7 @@ createWord.post('/createWord', async (req, res) => {
         await newWord.save();
         return res.json({message: 'Tao word thanh cong'});
     } catch (error) {
-        return res.json({error});
+        return res.json({message: error});
     }
 
 });
