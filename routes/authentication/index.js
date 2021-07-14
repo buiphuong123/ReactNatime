@@ -1,8 +1,10 @@
 const login =  require('./login');
 const register =  require('./register');
+const confirmation =  require('./confirmation');
+const resendLink =  require('./resendLink');
 const userLike =  require('./userLike');
 const userDisLike =  require('./userDisLike');
 const updateUser = require('./updateUser');
 const userMemerize = require('./userMemerize');
 const userNotMemerize = require('./userNotMemerize');
-module.exports = {login, register, userLike, userDisLike, updateUser, userMemerize, userNotMemerize};
+module.exports = {login, register, userLike, userDisLike, updateUser, userMemerize, userNotMemerize, confirmation, resendLink};

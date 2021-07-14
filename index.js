@@ -57,6 +57,10 @@ const useApi = (object, object2, prefix = []) => {
 	}
 };
 
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+
 useApi(api, api);
 
 app.listen(process.env.PORT || 3001);
