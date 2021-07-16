@@ -29,8 +29,8 @@ register.post('/register', async (req, res) => {
                 if(err) {
                     return res.json({err});
                 }
-                var transporter = nodemailer.createTransport({ service: 'gmail', auth: { user: 'buiphuongtan123@gmail.com', pass: 'susudangyeu12' } });
-                var mailOptions = { from: 'buiphuongtan123@gmail.com', to: newUser.email, subject: 'Account Verification Link', text: 'Hello '+ newUser.username +',\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/confirmation\/' + newUser.email + '\/' + token.token + '\n\nThank You!\n' };
+                var transporter = nodemailer.createTransport({ service: 'gmail', auth: { user: process.env['MAIL_ADDRESS'], pass: process.env['MAIL_PASSWORD'] } });
+                var mailOptions = { from: process.env['MAIL_ADDRESS'], to: newUser.email, subject: 'Account Verification Link', text: 'Hello '+ newUser.username +',\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/confirmation\/' + newUser.email + '\/' + token.token + '\n\nThank You!\n' };
                 transporter.sendMail(mailOptions, function(err) {
                     if (err) {
                         return res.json({err});

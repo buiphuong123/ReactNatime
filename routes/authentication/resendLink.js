@@ -29,8 +29,8 @@ resendLink.post('/resendLink', async (req, res) => {
                 }
     
                 // Send email (use credintials of SendGrid)
-                    var transporter = nodemailer.createTransport({ service: 'gmail', auth: { user: 'buiphuongtan123@gmail.com', pass: 'susudangyeu12' } });
-                    var mailOptions = { from: 'buiphuongtan123@gmail.com', to: user.email, subject: 'Account Verification Link', text: 'Hello '+ user.name +',\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/confirmation\/' + user.email + '\/' + token.token + '\n\nThank You!\n' };
+                    var transporter = nodemailer.createTransport({ service: 'gmail', auth: { user: process.env['MAIL_ADDRESS'], pass: process.env['MAIL_PASSWORD'] } });
+                    var mailOptions = { from: process.env['MAIL_ADDRESS'], to: user.email, subject: 'Account Verification Link', text: 'Hello '+ user.name +',\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/confirmation\/' + user.email + '\/' + token.token + '\n\nThank You!\n' };
                     transporter.sendMail(mailOptions, function (err) {
                        if (err) { 
                         return res.status(500).send({msg:'Technical Issue!, Please click on resend for verify your Email.'});
